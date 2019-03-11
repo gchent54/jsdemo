@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        table{
+            width: 600px;
+            text-align: center;
+        }
+         th {
+            height: 40px;
+        }
+        th:nth-of-type(3) input {
+            width: 100%;
+            outline: none;
+            height: 100%;
+            background-color: #e92322;
+            color: #fff;
+        }
+        td {
+            height: 23px;
+        }
+        td:nth-of-type(3) input {
+            width: 100%;
+            outline: none;
+            height: 100%;
+            background-color: #e92322;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1. 完成排序功能   ---  要求  渲染的json数据里面有用户点击量  点击按钮  根据点击量  分别对页面数据进行 升序 跟降序排列  -->
+    <table border="1" cellspacing="0" cellpadding="0">
+        <thead>
+            <th>书名</th>
+            <th>价格</th>
+            <th><input id="click" number="1" type="button" value="访问量(下面的是点击+1,本点击框实现排序)"></th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <p>注意：点击一次是从大到小排序，再点击一次是从小到大排序，以此类推</p>
+</body>
+<script src="js/jquery-1.12.2.js"></script>
+<script src="js/template-web.js"></script>
+<script type="text/template" id="bookTemplate">
+    {{each data}}
+        <tr index={{$value.index}}>
+            <td>{{$value.name}}</td>
+            <td>{{$value.price}}</td>
+            <td style="width:120px"><input type="button" value={{$value.clicks}}></td>
+        </tr>
+    {{/each}}
+</script>
+<script>
+    $(function () {
+        var data = [{
+                name: "《Vue.js从入门到放弃》",
+                price: 75.88,
+                clicks: 5
+            },
+            {
+                name: "《Node.js从入门到放弃》",
+                price: 45.88,
+                clicks: 6
+            },
+            {
+                name: "《MYSQL从删库到跑路》",
+                price: 52.88,
+                clicks: 3
+            },
+            {
+                name: "《Java从入门到放弃》",
+                price: 35.99,
+                clicks: 8
+            }
+        ];
+        //给每一个对象添加index
+        for (var a = 0; a < data.length; a++) {
+            data[a].index = a;
+        }
+        var html = template("bookTemplate", {
+            data: data
+        });
+        $("tbody").html(html);
+
+
+        //当点击的时候，添加事件的监听事件
+        $("tbody").on("click", "input", function () {
+            var target = $(this).val();
+            target++;
+            $(this).val(target);
+            //获取点击这一行的index自定义属性的值
+            var index = Number($(this).parent().parent().attr("index"));
+        });
+
+
+        $("#click").click(function () {
+            var arrList = [];
+            //获取每次点击时候的数字
+            var index = $(this).attr("number");
+            //每点击一次的话，index++
+            index++;
+            $(this).attr("number", index);
+            index = $(this).attr("number");
+            for (var a = 0; a < $("tbody").children().length; a++) {
+                data[a].clicks = $("tbody").children().eq(a).children().children().val();
+                // arrList.push($("tbody").children().eq(a).children().children().val())
+            }
+            var newData = data;
+            //下面是排序的方式
+            if (index % 2 === 0) {
+                function sortClicks(a, b) {
+                    return b.clicks - a.clicks
+                }
+                newData.sort(sortClicks);
+            } else if (index % 2 === 1) {
+                function sortClicks(a, b) {
+                    return a.clicks - b.clicks
+                }
+                newData.sort(sortClicks);
+            }
+
+            html = template("bookTemplate", {
+                data: newData
+            });
+            $("tbody").html(html);
+        });
+    });
+</script>
+
+</html>

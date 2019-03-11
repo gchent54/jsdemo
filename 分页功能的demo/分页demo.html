@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        table{
+            width: 100%;
+            text-align: center;
+        }
+        #app ul {
+            list-style: none;
+            float: right;
+        }
+        #app ul li {
+            float: left;
+            width: 50px;
+            height: 30px;
+            margin: 2px;
+            text-align: center;
+            line-height: 30px;
+           
+        }
+        #app ul li a {
+            height: 100%;
+            width: 100%;
+            text-decoration: none;
+            display: block;
+            background-color: #ccc;
+        }
+        /* #app ul li a:hover{
+            background-color: red;
+        } */
+    </style>
+</head>
+<body>
+    <div id="app">
+        <ul id="pagination">
+            <li><a href="javascript:;">首页</a></li>
+            <li><a href="javascript:;">上一张</a></li>
+            <li><a href="javascript:;">1</a></li>
+            <li><a href="javascript:;">2</a></li>
+            <li><a href="javascript:;">3</a></li>
+            <li><a href="javascript:;">4</a></li>
+            <li><a href="javascript:;">5</a></li>
+            <li><a href="javascript:;">下一张</a></li>
+            <li><a href="javascript:;">尾页</a></li>
+        </ul>
+        <table border="1" cellspacing="0" cellpadding="0">
+            <thead>
+                <th><input type="checkbox" name="" id=""></th>
+                <th>事件1</th>
+                <th>事件2</th>
+                <th>事件3</th>
+                <th>事件4</th>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <td><input type="checkbox" name="" id=""></td>
+                    <td>中国企业家蜕变史</td>
+                    <td>北魏为何始终难以彻底根除柔然？</td>
+                    <td>美团简史：八年与八个关键词</td>
+                    <td>无人车将在外卖行业率先普及</td>
+                </tr> -->
+            </tbody>
+
+        </table>
+    </div>
+</body>
+<script src="js/template-web.js"></script>
+<script type="text/template" id="pageTemplate">
+    {{each data}}
+     <tr>
+        <td><input type="checkbox"></td>
+        <td>{{$value.text1}}</td>
+        <td>{{$value.text2}}</td>
+        <td>{{$value.tetx3}}</td>
+        <td>{{$value.text4}}</td>
+    </tr>
+    {{/each}}
+</script>
+<script type="text/template" id="numnerTemplate">
+        <li cate-id="1"><a href="javascript:;">首页</a></li>
+        <li cate-id={{currentPage-1}} {{if(currentPage-1<1)}} style="display:none" {{/if}}><a href="javascript:;">上一张</a></li>
+        <li cate-id={{currentPage-2}} {{if(currentPage-2<1)}} style="display:none" {{/if}}><a href="javascript:;">{{currentPage-2}}</a></li>
+        <li cate-id={{currentPage-1}} {{if(currentPage-2<0)}} style="display:none" {{/if}}><a href="javascript:;">{{currentPage-1}}</a></li>
+        <li cate-id={{currentPage}}><a href="javascript:;">{{currentPage}}</a></li>
+        <li cate-id={{currentPage+1}} {{if(currentPage+1>maxPage)}} style="display:none" {{/if}}><a href="javascript:;">{{currentPage+1}}</a></li>
+        <li cate-id={{currentPage+2}} {{if(currentPage+2>maxPage)}} style="display:none" {{/if}}><a href="javascript:;">{{currentPage+2}}</a></li>
+        <li cate-id={{currentPage+1}} {{if(currentPage+1>maxPage)}} style="display:none" {{/if}}><a href="javascript:;">下一张</a></li>
+        <li cate-id={{maxPage}} ><a href="javascript:;">尾页</a></li>
+</script>
+<script src="js/jquery-1.12.2.js"></script>
+<script>
+    var data = [
+        {text1:"中国企业家蜕变史1",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史2",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史3",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史4",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史5",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史6",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史7",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史8",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史9",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史10",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史11",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史12",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史13",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史14",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史15",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史16",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史17",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史18",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史19",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史20",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史21",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史22",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史23",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史24",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史25",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史26",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史27",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史28",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史29",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史30",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史31",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史32",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史33",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史34",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史35",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史36",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史37",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史38",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史39",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史40",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史41",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史42",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史43",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史44",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史45",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史46",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史47",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史48",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史49",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史50",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史51",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史52",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史53",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史54",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史55",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史56",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史57",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史58",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史59",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史60",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史61",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史61",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史63",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史64",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史65",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史66",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史67",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史68",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史69",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史70",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史71",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史72",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史73",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史74",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史75",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史76",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史77",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史78",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史79",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史80",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"},
+        {text1:"中国企业家蜕变史81",text2:"北魏为何始终难以彻底根除柔然？",tetx3:"美团简史：八年与八个关键词",text4:"无人车将在外卖行业率先普及"}
+        ];
+   
+        $(function(){
+            var length = data.length;
+        //设置当前的页面是1;
+        var currentPage = 1;
+        // 每一页展示数据20条
+        var everyPage = 5;
+        //总共需要分多少页
+        var maxPage = Math.ceil(data.length/everyPage);
+        //在初始化的状态下，只展示20条数据,将这20条数据予以展示
+        var firstData = [];
+        for(var a = (currentPage-1)*everyPage;a<currentPage*everyPage;a++){
+            firstData.push(data[a]);
+        }
+        var html = template("pageTemplate",{data:firstData});
+        $("tbody").html(html);
+
+
+         //设置渲染到分页的数据
+       var data1 = {currentPage:currentPage,maxPage:maxPage};
+       var html1 = template("numnerTemplate",data1);
+       $("#pagination").html(html1);
+
+
+         //但我们点击的时候，获取当前是第几页
+         $("#pagination").on("click","li",function(){
+            //获取当前的index的值，将index赋给currentPage
+            var newIndex = $(this).attr("cate-id");
+            currentPage = Number(newIndex);
+            //设置渲染到分页的数据
+            var data1 = {currentPage:currentPage,maxPage:maxPage};
+            var html1 = template("numnerTemplate",data1);
+            $("#pagination").html(html1);
+
+            //设置当前状态下的背景的颜色
+            // console.log($(this).children()[0])
+        //    $(this).children().css("backgroundColor","red");
+
+           //判断当前是否是最后的一页
+            if(currentPage===maxPage){
+                var nowData = [];
+                for(var  a = (currentPage-1)*everyPage;a<length;a++){
+                    nowData.push(data[a]);
+                }
+                html = template("pageTemplate",{data:nowData});
+                $("tbody").html(html);
+            }else{
+                var nowData = [];
+                for(var a = (currentPage-1)*everyPage;a<currentPage*everyPage;a++){
+                     nowData.push(data[a]);
+            }
+            html = template("pageTemplate",{data:nowData});
+            $("tbody").html(html);
+            }
+            
+            //如果到了最后的一页的话
+            // if(currentPage=maxPage){
+            //     var nowData = [];
+            //     for(var a = (currentPage-1)*everyPage;a<length;a++){
+            //         nowData.push(data[a]);
+            //     }
+            //     var html1 = template("pageTemplate",{data:nowData});
+            //     console.log(html1);
+            //     $("tbody").html(html1);
+            // }else if(currentPage<maxPage){
+            //     var nowData = [];
+            //     for(var a = (currentPage-1)*everyPage;a<currentPage*everyPage;a++){
+            //         nowData.push(data[a]);
+            //     }
+            // }
+           
+             
+
+            //重新渲染数据
+            // var html = template("pageTemplate",{data:firstData});
+            // $("tbody").html(html);
+        });
+        
+      
+       
+
+       //点击首页的时候，获取0-20的数据，初始状态下也是这样
+    })
+</script>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			#textContent {
+				width: 100%;
+			}
+			#textContent div {
+				width: 100%;
+				height: 30px;
+			}
+			#submit {
+				margin-left: 20px;
+				margin-top: 10px;
+				margin-bottom: 20px;
+			}
+			#delete {
+				margin-left: 20px;
+				margin-top: 14px;
+			}
+			#textContent table {
+				width: 600px;
+				/* border: 1px solid skyblue; */
+				text-align: center;
+				margin: 0;
+				padding: 0;
+			}
+			#delete{
+				display: inline-block;
+				width: 60px;
+				height: 30px;
+				margin-bottom: 10px;
+			}
+			#textContent table tbody td {
+				height: 30px;
+			}
+			th {
+				background-color: yellowgreen;
+				height: 75px;
+				color: #fff;
+				font-size: 24px;
+				font-family: "楷体";
+			}
+			tbody tr {
+				
+				background-color: skyblue;
+				font-family: "楷体";
+				font-size: 18px;
+				color: #222;
+			}
+			tbody input {
+				color: #fff;
+				background-color: red;
+				outline: none;
+				border:none;
+				display: inline-block;
+				width: 20px;
+				height: 20px;
+				border: 1px solid #fff;
+				font-family: "楷体";
+				font-size: 18px;
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<form action="#">
+			姓名:<input type="text" id="name"><br>
+			年龄:<input type="text" id="age"><br>
+			工作:<input type="text" id="work"><br>
+			<input type="button" id="submit" value="添加" />
+		</form>
+		
+		<div id="textContent">
+			<table  border="1" cellspacing="0">
+				<thead>
+					<th>姓名</th>
+					<th>年龄</th>
+					<th>工作</th>
+					<th>操作</th>
+				</thead>
+				<tbody>
+					<!-- <tr>
+						<td>陈刚</td>
+						<td>24</td>
+						<td>前端工程师</td>
+						<td><input type="button" value="删除" id="delete"></td>
+					</tr> -->
+				</tbody>
+			</table>
+		</div>
+	</body>
+	
+	<script src="js/template-web.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/template" id="textTemplate">
+		{{each data}}
+		<tr>
+			<td>{{$value.name}}</td>
+			<td>{{$value.age}}</td>
+			<td>{{$value.work}}</td>
+			<td><input type="button" value="删除" id="delete" ></td>
+		</tr>
+		{{/each}}
+	</script>
+	<script src="js/jquery-1.12.2.js"></script>
+	<script type="text/javascript">
+		// var data = [{name:"陈刚",age:24,work:"前端工程师"}];
+		var data = [];
+		var html = template("textTemplate",{data:data});
+		$("tbody").html(html);
+		// 获取用户输入的数据当用户提交的时候
+		$("#submit").click(function() {
+			var json = {name:'',age:'',work:''};
+			var name = $("#name").val();
+			var age = $("#age").val();
+			var work = $("#work").val();	
+			json.name = name;
+			json.age = age;
+			json.work = work;
+			data.push(json);
+			var newJson = JSON.stringify(data);
+			// 将数据转换为json存储到本地
+			window.localStorage.setItem("json",newJson);
+			// 将用户添加的数据添加到data里面
+			// 当页面刷新的时候，判断当前有没有添加的数据
+			html = template("textTemplate",{data:data});
+			$("tbody").html(html);
+
+			//当数据输入完毕之后，清除input里面的内容
+			$("#name").val("");
+			$("#age").val("");
+			$("#work").val("");
+		});
+		//将用模板引擎渲染的页面结构添加到指定的地方
+		// 拿到存储到本本地的数据
+		// document.querySelector("1").addEventListener
+
+		// 当点击删除的时候。删除对应的数据，同样数据也要求存储本地获取解析
+		// 由于删除的按钮是动态生成的，因此采用下面的方式实现
+		// $("tbody input").each(function(index,value) {
+		// 		console.log(index);
+		// });
+		$("tbody").on("click","#delete",function() {
+			var that = this;
+			var tbody = $(this).parent().parent().parent();
+			var name = tbody.children().children().eq(0).text();
+			var age = tbody.children().children().eq(1).text();
+			var work = tbody.children().children().eq(2).text();
+			var nextJson = {name:name,age:age,work:work};
+			nextJson = JSON.stringify(nextJson);
+			var newNextJson = JSON.parse(nextJson);     
+			// 从本地的存储拿到数据，解析为json的格式
+			var localJson = window.localStorage.getItem("json");
+			// 将localJson转换解析
+			var newJson = JSON.parse(localJson);
+
+			// console.log(nextJson)
+			// 判断json里面有没有删除的内容
+			$("tbody input").each(function(index,value) {
+				// 设置自定义的属性
+				// console.log(index);
+				value.setAttribute("index",index);
+			})
+			
+			if(localJson.indexOf(nextJson)!=-1) {
+				
+			$(this).parent().parent().remove();
+				// 删除在目标下的内容同时要把本地的存储也删除
+				//获取索引，删除数据
+				var index = that.getAttribute("index");
+				console.log(index);
+				var new1 = newJson.splice(index,1);
+				var data = newJson;
+				var jsonPer = JSON.stringify(newJson);
+				//将删除好的数据转化存储在本地
+				window.localStorage.setItem("json",jsonPer);
+				html = template("textTemplate",{data:data});
+				$("tbody").html(html);
+				console.log(newJson);
+			}
+		});
+
+
+		// 下面的代码是在本地有存储的情况下执行
+		if(window.localStorage.getItem("json")) {
+			var data1 = window.localStorage.getItem("json");
+			// 将拿到的数据解析，重新赋给data
+			data = JSON.parse(data1);
+			html = template("textTemplate",{data:data});
+			$("tbody").html(html);
+		}
+	</script>
+</html>
